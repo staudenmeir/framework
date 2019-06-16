@@ -5,6 +5,7 @@ namespace Illuminate\Database\Eloquent\Concerns;
 use Closure;
 use RuntimeException;
 use Illuminate\Support\Str;
+use Illuminate\Support\Arr;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Query\Expression;
 use Illuminate\Database\Eloquent\Relations\MorphTo;
@@ -188,16 +189,18 @@ trait QueriesRelationships
      * Add a polymorphic relationship count / exists condition to the query.
      *
      * @param  string  $relation
-     * @param  array  $types
+     * @param  string|array  $types
      * @param  string  $operator
      * @param  int  $count
      * @param  string  $boolean
      * @param  \Closure|null  $callback
      * @return \Illuminate\Database\Eloquent\Builder|static
      */
-    public function hasPolymorphic($relation, array $types, $operator = '>=', $count = 1, $boolean = 'and', Closure $callback = null)
+    public function hasPolymorphic($relation, $types, $operator = '>=', $count = 1, $boolean = 'and', Closure $callback = null)
     {
         $relation = $this->getRelationWithoutConstraints($relation);
+
+        $types = Arr::wrap($types);
 
         if ($types === ['*']) {
             $types = $this->model->newModelQuery()->distinct()->pluck($relation->getMorphType());
@@ -227,12 +230,12 @@ trait QueriesRelationships
      * Add a polymorphic relationship count / exists condition to the query with an "or".
      *
      * @param  string  $relation
-     * @param  array  $types
+     * @param  string|array  $types
      * @param  string  $operator
      * @param  int  $count
      * @return \Illuminate\Database\Eloquent\Builder|static
      */
-    public function orHasPolymorphic($relation, array $types, $operator = '>=', $count = 1)
+    public function orHasPolymorphic($relation, $types, $operator = '>=', $count = 1)
     {
         return $this->hasPolymorphic($relation, $types, $operator, $count, 'or');
     }
@@ -241,12 +244,12 @@ trait QueriesRelationships
      * Add a polymorphic relationship count / exists condition to the query.
      *
      * @param  string  $relation
-     * @param  array  $types
+     * @param  string|array  $types
      * @param  string  $boolean
      * @param  \Closure|null  $callback
      * @return \Illuminate\Database\Eloquent\Builder|static
      */
-    public function doesntHavePolymorphic($relation, array $types, $boolean = 'and', Closure $callback = null)
+    public function doesntHavePolymorphic($relation, $types, $boolean = 'and', Closure $callback = null)
     {
         return $this->hasPolymorphic($relation, $types, '<', 1, $boolean, $callback);
     }
@@ -255,10 +258,10 @@ trait QueriesRelationships
      * Add a polymorphic relationship count / exists condition to the query with an "or".
      *
      * @param  string  $relation
-     * @param  array  $types
+     * @param  string|array  $types
      * @return \Illuminate\Database\Eloquent\Builder|static
      */
-    public function orDoesntHavePolymorphic($relation, array $types)
+    public function orDoesntHavePolymorphic($relation, $types)
     {
         return $this->doesntHavePolymorphic($relation, $types, 'or');
     }
@@ -267,13 +270,13 @@ trait QueriesRelationships
      * Add a polymorphic relationship count / exists condition to the query with where clauses.
      *
      * @param  string  $relation
-     * @param  array  $types
+     * @param  string|array  $types
      * @param  \Closure|null  $callback
      * @param  string  $operator
      * @param  int  $count
      * @return \Illuminate\Database\Eloquent\Builder|static
      */
-    public function whereHasPolymorphic($relation, array $types, Closure $callback = null, $operator = '>=', $count = 1)
+    public function whereHasPolymorphic($relation, $types, Closure $callback = null, $operator = '>=', $count = 1)
     {
         return $this->hasPolymorphic($relation, $types, $operator, $count, 'and', $callback);
     }
@@ -282,13 +285,13 @@ trait QueriesRelationships
      * Add a polymorphic relationship count / exists condition to the query with where clauses and an "or".
      *
      * @param  string  $relation
-     * @param  array  $types
+     * @param  string|array  $types
      * @param  \Closure  $callback
      * @param  string  $operator
      * @param  int  $count
      * @return \Illuminate\Database\Eloquent\Builder|static
      */
-    public function orWhereHasPolymorphic($relation, array $types, Closure $callback = null, $operator = '>=', $count = 1)
+    public function orWhereHasPolymorphic($relation, $types, Closure $callback = null, $operator = '>=', $count = 1)
     {
         return $this->hasPolymorphic($relation, $types, $operator, $count, 'or', $callback);
     }
@@ -297,11 +300,11 @@ trait QueriesRelationships
      * Add a polymorphic relationship count / exists condition to the query with where clauses.
      *
      * @param  string  $relation
-     * @param  array  $types
+     * @param  string|array  $types
      * @param  \Closure|null  $callback
      * @return \Illuminate\Database\Eloquent\Builder|static
      */
-    public function whereDoesntHavePolymorphic($relation, array $types, Closure $callback = null)
+    public function whereDoesntHavePolymorphic($relation, $types, Closure $callback = null)
     {
         return $this->doesntHavePolymorphic($relation, $types, 'and', $callback);
     }
@@ -310,11 +313,11 @@ trait QueriesRelationships
      * Add a polymorphic relationship count / exists condition to the query with where clauses and an "or".
      *
      * @param  string  $relation
-     * @param  array  $types
+     * @param  string|array  $types
      * @param  \Closure  $callback
      * @return \Illuminate\Database\Eloquent\Builder|static
      */
-    public function orWhereDoesntHavePolymorphic($relation, array $types, Closure $callback = null)
+    public function orWhereDoesntHavePolymorphic($relation, $types, Closure $callback = null)
     {
         return $this->doesntHavePolymorphic($relation, $types, 'or', $callback);
     }
