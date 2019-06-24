@@ -218,11 +218,22 @@ trait QueriesRelationships
                         };
                     }
 
-                    $query->where($relation->getMorphType(), '=', $type)
+                    $query->where($relation->getMorphType(), '=', $this->morphTypeColumnValue($type))
                         ->whereHas($belongsTo, $callback, $operator, $count);
                 });
             }
         }, null, null, $boolean);
+    }
+
+    /**
+     * Get the morph type column value for a given alias / class.
+     *
+     * @param  string  $type
+     * @return string
+     */
+    protected function morphTypeColumnValue($type)
+    {
+        return array_search($type, Relation::$morphMap) ?: $type;
     }
 
     /**
