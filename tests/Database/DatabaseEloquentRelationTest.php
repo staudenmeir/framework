@@ -234,6 +234,29 @@ class DatabaseEloquentRelationTest extends TestCase
         Relation::morphMap([], false);
     }
 
+    public function testGetMorphAliasReturnsExpectedAlias()
+    {
+        Relation::morphMap(['expected_alias' => MappedClass::class]);
+
+        $this->assertSame('expected_alias', Relation::getMorphAlias(MappedClass::class));
+
+        Relation::morphMap([], false);
+    }
+
+    public function testGetMorphAliasReturnsNullWhenNoAliasFound()
+    {
+        $this->assertNull(Relation::getMorphAlias(MissingClass::class));
+    }
+
+    public function testFalsyMorphAliasValuesAreReturned()
+    {
+        Relation::morphMap(['' => MappedClass::class]);
+
+        $this->assertSame('', Relation::getMorphAlias(MappedClass::class));
+
+        Relation::morphMap([], false);
+    }
+
     public function testMacroable()
     {
         Relation::macro('foo', function () {

@@ -218,7 +218,7 @@ trait QueriesRelationships
                         };
                     }
 
-                    $query->where($relation->getMorphType(), '=', $type)
+                    $query->where($relation->getMorphType(), '=', Relation::getMorphAlias($type) ?? $type)
                         ->whereHas($belongsTo, $callback, $operator, $count);
                 });
             }

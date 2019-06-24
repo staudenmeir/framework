@@ -343,6 +343,19 @@ abstract class Relation
     }
 
     /**
+     * Get the alias for the given class.
+     *
+     * @param  string  $class
+     * @return string|null
+     */
+    public static function getMorphAlias($class)
+    {
+        $alias = array_search($class, static::$morphMap);
+
+        return $alias === false ? null : $alias;
+    }
+
+    /**
      * Builds a table-keyed array from model class names.
      *
      * @param  string[]|null  $models
