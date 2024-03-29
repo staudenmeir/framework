@@ -5,6 +5,7 @@ on:
     branches:
       - master
       - '*.x'
+      - sqlsrv
   pull_request:
 
 jobs:
@@ -197,7 +198,7 @@ jobs:
 
     services:
       sqlsrv:
-        image: mcr.microsoft.com/mssql/server:2019-latest
+        image: mcr.microsoft.com/mssql/server:2022-latest
         env:
           ACCEPT_EULA: Y
           SA_PASSWORD: Forge123
@@ -207,7 +208,7 @@ jobs:
     strategy:
       fail-fast: true
 
-    name: SQL Server 2019
+    name: SQL Server 2022
 
     steps:
       - name: Checkout code
