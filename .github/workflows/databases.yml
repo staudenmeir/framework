@@ -5,6 +5,7 @@ on:
     branches:
       - master
       - '*.x'
+      - pgsql
   pull_request:
 
 jobs:
@@ -149,7 +150,7 @@ jobs:
 
     services:
       postgresql:
-        image: postgres:14
+        image: postgres:11
         env:
           POSTGRES_DB: laravel
           POSTGRES_USER: forge
